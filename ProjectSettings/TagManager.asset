@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Hide
   - NotHide
+  - Treasure
   layers:
   - Default
   - TransparentFX
