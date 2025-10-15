@@ -7,8 +7,9 @@ using UnityEngine;
 public class Flock : MonoBehaviour
 {
     public FlockAgent agentPrefab;
-    List<FlockAgent> agents = new List<FlockAgent>();
+    public Transform assignedLeader;
     public FlockBehavior behavior;
+    List<FlockAgent> agents = new List<FlockAgent>();
 
     [Range(10, 500)]
     public int startingCount = 250;
@@ -33,10 +34,6 @@ public class Flock : MonoBehaviour
 
     //fix y axis
     float yAxisValue = 0.5f;
-    public float getYAxisValue 
-    { 
-        get { return yAxisValue; } 
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -45,6 +42,22 @@ public class Flock : MonoBehaviour
         squareNeighborRadius = neighborRadius * neighborRadius;
         squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
 
+        //assign leader to follow leader behavior
+        //check if behavior is composite
+        if(behavior is Composite composite)
+        {
+            //check which one of the behaviors in composite is the follow leader behavior
+            foreach (var v in composite.behaviors)
+            {
+                //assign leader
+                if(v is FollowLeader followLeader)
+                {
+                    followLeader.Leader = assignedLeader;
+                }
+            }
+        }
+
+        //create agents
         for (int i = 0; i < startingCount; i++)
         {
             Vector2 unitCirclePos = UnityEngine.Random.insideUnitCircle;

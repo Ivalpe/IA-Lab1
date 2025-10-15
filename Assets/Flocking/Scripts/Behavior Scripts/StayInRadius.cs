@@ -23,11 +23,6 @@ public class StayInRadius : FlockBehavior
 
         //otherwise start pulling towards the center
         centerOffset = centerOffset * t * t;
-
-        //maintain y fixed
-        centerOffset.y = flock.getYAxisValue;
-
-        //otherwise start pulling towards the center
         return centerOffset;
     }
 }
