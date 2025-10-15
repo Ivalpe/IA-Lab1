@@ -867,6 +867,7 @@ GameObject:
   - component: {fileID: 696251291}
   - component: {fileID: 696251290}
   - component: {fileID: 696251289}
+  - component: {fileID: 696251294}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -1011,6 +1012,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &696251294
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696251288}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.49999997
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.9999999
+  m_BaseOffset: 0.99999994
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &796279607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,6 +1179,7 @@ GameObject:
   - component: {fileID: 843575294}
   - component: {fileID: 843575293}
   - component: {fileID: 843575297}
+  - component: {fileID: 843575298}
   m_Layer: 0
   m_Name: Cop
   m_TagString: Untagged
@@ -1270,11 +1294,20 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 9188994943619957008
   - rid: 9188994943619957009
+  - rid: 7298682780920840242
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
     version: 2
     RefIds:
+    - rid: 7298682780920840242
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1385660767377843160
+          m_Value1: 12964502260924057365
+        Name: Agent
+        m_Value: {fileID: 696251288}
     - rid: 9188994943619957008
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -1291,6 +1324,28 @@ MonoBehaviour:
           m_Value1: 2516612289688021844
         Name: Target
         m_Value: {fileID: 1857146955}
+--- !u!195 &843575298
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843575292}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.49999997
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.9999999
+  m_BaseOffset: 0.99999994
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1094208674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,7 +1742,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1857146955}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
