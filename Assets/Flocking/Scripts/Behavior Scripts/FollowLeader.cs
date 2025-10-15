@@ -8,7 +8,7 @@ public class FollowLeader : FlockBehavior
 {
     public Transform Leader;
     Vector3 currentVelocity;
-    public float agentSmoothTime = 0.5f;
+    public float agentSmoothTime = 0.05f;
     public override Vector3 CalculateMove(FlockAgent agent, List<Transform> context, Flock flock)
     {
         //moves agent towards flock leader
@@ -25,7 +25,7 @@ public class FollowLeader : FlockBehavior
         leaderOffset = leaderOffset.normalized;
 
         //smooth it like cohesion so it doesnt flicker
-        leaderOffset = Vector3.SmoothDamp(agent.transform.forward, leaderOffset, ref currentVelocity, agentSmoothTime);
+        //leaderOffset = Vector3.SmoothDamp(agent.transform.forward, leaderOffset, ref currentVelocity, agentSmoothTime);
         return leaderOffset;
     }
     

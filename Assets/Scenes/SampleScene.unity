@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Graph: {fileID: 2410359682276732881, guid: 638582a91800975429948aaa843ebf92, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 2804176111057240451
+  - rid: 7298682779632927213
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -232,6 +233,19 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 286921923}
+    - rid: 7298682779632927213
+      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17578600246167844399
+          m_Value1: 11957142177049960043
+        Name: Targets
+        m_Value:
+        - {fileID: 1813341703}
+        - {fileID: 1911024887}
+        - {fileID: 92050303}
+        - {fileID: 1858743168}
+        - {fileID: 796279607}
 --- !u!135 &286921925
 SphereCollider:
   m_ObjectHideFlags: 0
