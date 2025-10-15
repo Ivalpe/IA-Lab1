@@ -9,6 +9,7 @@ TagManager:
   - Treasure
   - FlockPoint
   - HitPoint
+  - Cop
   layers:
   - Default
   - TransparentFX
