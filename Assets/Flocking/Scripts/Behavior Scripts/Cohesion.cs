@@ -4,7 +4,7 @@ using Unity.AppUI.UI;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Flock/Behavior/Cohesion")]
-public class Cohesion : FlockBehavior
+public class Cohesion : FilteredFlockBehavior
 {
     public override Vector3 CalculateMove(FlockAgent agent, List<Transform> context, Flock flock)
     {
@@ -18,7 +18,10 @@ public class Cohesion : FlockBehavior
 
         //add points together
         Vector3 cohesionMove = Vector3.zero;
-        foreach (Transform t in context)
+
+        //apply context filter if there is one
+        List<Transform> filteredContext = (filter == null) ? context : filter.Filter(agent, context);
+        foreach (Transform t in filteredContext)
         {
             cohesionMove += t.position;
         }
@@ -27,6 +30,8 @@ public class Cohesion : FlockBehavior
 
         //offset for the specific agent position
         cohesionMove -= agent.transform.position;
+        //fix y
+        cohesionMove.y = 0f;
         return cohesionMove;
     }
 }

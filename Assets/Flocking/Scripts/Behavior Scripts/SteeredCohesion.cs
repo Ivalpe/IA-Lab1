@@ -5,7 +5,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "Flock/Behavior/SteeredCohesion")]
 
-public class SteeredCohesion : FlockBehavior
+public class SteeredCohesion : FilteredFlockBehavior
 {
     Vector3 currentVelocity;
     public float agentSmoothTime = 0.5f;
@@ -22,7 +22,10 @@ public class SteeredCohesion : FlockBehavior
 
         //add points together
         Vector3 cohesionMove = Vector3.zero;
-        foreach (Transform t in context)
+
+        //apply context filter if there is one
+        List<Transform> filteredContext = (filter == null) ? context : filter.Filter(agent, context);
+        foreach (Transform t in filteredContext)
         {
             cohesionMove += t.position;
         }
@@ -33,6 +36,8 @@ public class SteeredCohesion : FlockBehavior
         cohesionMove -= agent.transform.position;
         //smoothing the movement
         cohesionMove = Vector3.SmoothDamp(agent.transform.forward, cohesionMove, ref currentVelocity, agentSmoothTime);
+        //fix y
+        cohesionMove.y = 0f;
         return cohesionMove;
     }
 }
