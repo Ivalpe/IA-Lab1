@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Behavior;
 using UnityEngine;
 
 public class TomNook : MonoBehaviour
@@ -12,6 +13,9 @@ public class TomNook : MonoBehaviour
 
     public LayerMask targetMask;
     public LayerMask obstructionMask;
+    [SerializeField] private RuntimeBlackboardAsset m_blackboardAsset;
+
+    //private BlackboardVariable<Vector3> PosTarget;
 
     public bool canSeePlayer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -45,8 +49,21 @@ public class TomNook : MonoBehaviour
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) { 
                     canSeePlayer = true;
+                    //PosTarget.Value = target.position;
+                    foreach (var bbv in m_blackboardAsset.Blackboard.Variables)
+                    {
+                        Debug.Log("We are searching");
+                        if(bbv.Name == "PosTarget")
+                        {
+                            if(bbv is BlackboardVariable<Vector3> vectorBbv){
+                                Debug.Log("Found");
+                                vectorBbv.Value = target.position;
+                            }
+                        }
+                    }
+                }
                 else
                     canSeePlayer = false;
             }
@@ -55,11 +72,5 @@ public class TomNook : MonoBehaviour
         }
         else if (canSeePlayer)
             canSeePlayer = false;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
