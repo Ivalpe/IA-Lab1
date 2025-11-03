@@ -1,24 +1,24 @@
 using System.Collections;
 using Unity.Behavior;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class TomNook : MonoBehaviour
 {
 
     public float radius;
-    [Range(0,360)]
+    [Range(0, 360)]
     public float angle;
-
-    public GameObject playerRef;
 
     public LayerMask targetMask;
     public LayerMask obstructionMask;
+    public GameObject playerRef;
+
     [SerializeField] private RuntimeBlackboardAsset m_blackboardAsset;
 
-    //private BlackboardVariable<Vector3> PosTarget;
-
     public bool canSeePlayer;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         playerRef = GameObject.FindGameObjectWithTag("Player");
@@ -38,39 +38,75 @@ public class TomNook : MonoBehaviour
 
     private void FieldOfViewCheck()
     {
+        LayerMask playerMask = 1 << LayerMask.NameToLayer("Target");
+        LayerMask moneyBagMask = 1 << LayerMask.NameToLayer("MoneyBags");
+
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radius, targetMask);
 
+
+        Transform bestTarget = null;
+        float closestDistance = float.MaxValue;
+
+        // Check each target in range
         if (rangeChecks.Length != 0)
         {
-            Transform target = rangeChecks[0].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+            foreach (Collider col in rangeChecks)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+                Transform currentTarget = col.transform;
+                Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
+                float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) { 
-                    canSeePlayer = true;
-                    //PosTarget.Value = target.position;
-                    foreach (var bbv in m_blackboardAsset.Blackboard.Variables)
+                if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+                {
+                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                     {
-                        Debug.Log("We are searching");
-                        if(bbv.Name == "PosTarget")
+                        int targetLayer = 1 << currentTarget.gameObject.layer;
+
+                        // Found the player
+                        if ((targetLayer & playerMask) != 0)
                         {
-                            if(bbv is BlackboardVariable<Vector3> vectorBbv){
-                                Debug.Log("Found");
-                                vectorBbv.Value = target.position;
+                            bestTarget = currentTarget;
+                            break;
+                        }
+
+                        // Found a money bag
+                        if ((targetLayer & moneyBagMask) != 0)
+                        {
+                            if (distanceToTarget < closestDistance)
+                            {
+                                closestDistance = distanceToTarget;
+                                bestTarget = currentTarget;
                             }
                         }
                     }
                 }
-                else
-                    canSeePlayer = false;
             }
-            else
-                canSeePlayer = false;
         }
-        else if (canSeePlayer)
+
+        BlackboardVariable<Vector3> posTargetBbv = null;
+        BlackboardVariable<bool> seeingVillagerBbv = null;
+
+        foreach (var bbv in m_blackboardAsset.Blackboard.Variables)
+        {
+            if (bbv.Name == "PosTarget" && bbv is BlackboardVariable<Vector3> vectorBbv)
+                posTargetBbv = vectorBbv;
+
+            if (bbv.Name == "SeeingVillager" && bbv is BlackboardVariable<bool> boolBbv)
+                seeingVillagerBbv = boolBbv;
+        }
+
+        if (bestTarget != null) //Target found
+        {
+            canSeePlayer = true;
+            posTargetBbv.Value = bestTarget.position;
+            seeingVillagerBbv.Value = true;
+        }
+        else //No target found
+        {
             canSeePlayer = false;
+            seeingVillagerBbv.Value = false;
+        }
+
     }
+
 }

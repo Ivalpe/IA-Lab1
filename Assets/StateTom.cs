@@ -6,5 +6,6 @@ public enum StateTom
 {
     Idle,
 	Chasing,
-	Tracking
+	Tracking,
+	LastPosition
 }
