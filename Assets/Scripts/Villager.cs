@@ -1,14 +1,21 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using Unity.Behavior;
+using Unity.VisualScripting;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class Villager : MonoBehaviour
 {
+    public GameObject SmellSource;
 
     private NavMeshAgent agent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        StartCoroutine(CreateSmellSource());
     }
 
     // Update is called once per frame
@@ -24,5 +31,16 @@ public class Villager : MonoBehaviour
             }
         }
         
+    }
+
+    private IEnumerator CreateSmellSource()
+    {
+        WaitForSeconds wait = new WaitForSeconds(2);
+
+        while (true)
+        {
+            yield return wait;
+            //Instantiate(SmellSource);
+        }
     }
 }

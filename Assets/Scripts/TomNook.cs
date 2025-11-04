@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.Behavior;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class TomNook : MonoBehaviour
@@ -10,6 +11,7 @@ public class TomNook : MonoBehaviour
     public float radius;
     [Range(0, 360)]
     public float angle;
+    public Vector3 MoneyPos = Vector3.zero;
 
     public LayerMask targetMask;
     public LayerMask obstructionMask;
@@ -18,6 +20,7 @@ public class TomNook : MonoBehaviour
     [SerializeField] private RuntimeBlackboardAsset m_blackboardAsset;
 
     public bool canSeePlayer;
+    public bool canSeeMoney;
 
     void Start()
     {
@@ -36,6 +39,54 @@ public class TomNook : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("YAY");
+        if (other.tag == "MoneyBagSource")
+        {
+            Debug.Log("Found money");
+            MoneyPos = other.gameObject.transform.position;
+            canSeeMoney = true;
+            SetBlackboardValues();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("EXIT");
+        if (other.tag == "MoneyBagSource")
+        {
+            Debug.Log("money left");
+            canSeeMoney = false;
+            SetBlackboardValues();
+        }
+    }
+
+    private void SetBlackboardValues()
+    {
+        BlackboardVariable<Vector3> posSourceBbv = null;
+        BlackboardVariable<bool> seeingMoneyBbv = null;
+
+        foreach (var bbv in m_blackboardAsset.Blackboard.Variables)
+        {
+            if (bbv.Name == "PosSource" && bbv is BlackboardVariable<Vector3> vectorBbv)
+                posSourceBbv = vectorBbv;
+
+            if (bbv.Name == "SeeingMoney" && bbv is BlackboardVariable<bool> boolBbv)
+                seeingMoneyBbv = boolBbv;
+        }
+
+        if (canSeeMoney)
+        {
+            seeingMoneyBbv.Value = true;
+            posSourceBbv.Value = MoneyPos;
+        }
+        else
+        {
+            seeingMoneyBbv.Value = false;
+        }
+    }
+
     private void FieldOfViewCheck()
     {
         LayerMask playerMask = 1 << LayerMask.NameToLayer("Target");
@@ -45,7 +96,7 @@ public class TomNook : MonoBehaviour
 
 
         Transform bestTarget = null;
-        float closestDistance = float.MaxValue;
+        //float closestDistance = float.MaxValue;
 
         // Check each target in range
         if (rangeChecks.Length != 0)
@@ -70,14 +121,14 @@ public class TomNook : MonoBehaviour
                         }
 
                         // Found a money bag
-                        if ((targetLayer & moneyBagMask) != 0)
-                        {
-                            if (distanceToTarget < closestDistance)
-                            {
-                                closestDistance = distanceToTarget;
-                                bestTarget = currentTarget;
-                            }
-                        }
+                        //if ((targetLayer & moneyBagMask) != 0)
+                        //{
+                        //    if (distanceToTarget < closestDistance)
+                        //    {
+                        //        closestDistance = distanceToTarget;
+                        //        bestTarget = currentTarget;
+                        //    }
+                        //}
                     }
                 }
             }
