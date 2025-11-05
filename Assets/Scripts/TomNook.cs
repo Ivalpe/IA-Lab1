@@ -41,10 +41,10 @@ public class TomNook : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("YAY");
+        //found a money bag
         if (other.tag == "MoneyBagSource")
         {
-            Debug.Log("Found money");
+            //Debug.Log("Found money");
             MoneyPos = other.gameObject.transform.position;
             canSeeMoney = true;
             SetBlackboardValues();
@@ -53,10 +53,9 @@ public class TomNook : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("EXIT");
+        //no money bag inside trigger
         if (other.tag == "MoneyBagSource")
         {
-            Debug.Log("money left");
             canSeeMoney = false;
             SetBlackboardValues();
         }
@@ -76,6 +75,7 @@ public class TomNook : MonoBehaviour
                 seeingMoneyBbv = boolBbv;
         }
 
+        //check if money within trigger
         if (canSeeMoney)
         {
             seeingMoneyBbv.Value = true;
@@ -119,16 +119,6 @@ public class TomNook : MonoBehaviour
                             bestTarget = currentTarget;
                             break;
                         }
-
-                        // Found a money bag
-                        //if ((targetLayer & moneyBagMask) != 0)
-                        //{
-                        //    if (distanceToTarget < closestDistance)
-                        //    {
-                        //        closestDistance = distanceToTarget;
-                        //        bestTarget = currentTarget;
-                        //    }
-                        //}
                     }
                 }
             }
