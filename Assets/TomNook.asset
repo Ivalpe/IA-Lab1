@@ -20,7 +20,7 @@ MonoBehaviour:
     m_Variables:
     - rid: 9188995419232272676
     - rid: 5900750236026405496
-    - rid: 5900750236714009036
+    - rid: 5900750298344850178
     - rid: 7052316062634738471
   m_SharedBlackboardVariableGuids:
   - m_Value0: 17387901250727444806
@@ -42,7 +42,7 @@ MonoBehaviour:
           m_Value1: 10250147530018068864
         Name: SeeingVillager
         m_Value: 0
-    - rid: 5900750236714009036
+    - rid: 5900750298344850178
       type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
